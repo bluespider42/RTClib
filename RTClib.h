@@ -110,7 +110,7 @@ public:
     static DateTime now();
     static Ds3231SqwPinMode readSqwPinMode();
     static void writeSqwPinMode(Ds3231SqwPinMode mode);
-	static float getTemperature();		// in Celcius degree
+	static float getTemperature(bool force = false);		// in Celcius degree
     bool setAlarm1(const DateTime& dt, Ds3231Alarm1Mode alarm_mode);
     bool setAlarm2(const DateTime& dt, Ds3231Alarm2Mode alarm_mode);
     void disableAlarm(uint8_t alarm_num);

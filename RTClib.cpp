@@ -571,21 +571,28 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
 	return (status >> (alarm_num - 1)) & 0x1;
 }
 
-float RTC_DS3231::getTemperature()
-{
+float RTC_DS3231::getTemperature(bool force) {
   uint8_t msb, lsb;
-  Wire.beginTransmission(DS3231_ADDRESS);
-  Wire._I2C_WRITE(DS3231_TEMPERATUREREG);
-  Wire.endTransmission();
-  
-  Wire.requestFrom(DS3231_ADDRESS, 2);
-  msb = Wire._I2C_READ();
-  lsb = Wire._I2C_READ();
-  
+
+    if (force) {
+        while (read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG) & 0b00000100); // check for BSY bit
+        ctrl = read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL);
+        write_i2c_register(DS3231_ADDRESS, DS3231_CONTROL, ctrl | 0b00100000);    // set CONV
+        while (read_i2c_register(DS3231_ADDRESS, DS3231_CONTROL) & 0b00100000);   // check for CONV bit
+    }
+
+    Wire.beginTransmission(DS3231_ADDRESS);
+    Wire._I2C_WRITE(DS3231_TEMPERATUREREG);
+    Wire.endTransmission();
+
+    Wire.requestFrom(DS3231_ADDRESS, 2);
+    msb = Wire._I2C_READ();
+    lsb = Wire._I2C_READ();
+
 //  Serial.print("msb=");
 //  Serial.print(msb,HEX);
 //  Serial.print(", lsb=");
 //  Serial.println(lsb,HEX);
 
-  return (float) msb + (lsb >> 6) * 0.25f;
+    return (float) msb + (lsb >> 6) * 0.25f;
 }
