@@ -572,7 +572,7 @@ bool RTC_DS3231::alarmFired(uint8_t alarm_num) {
 }
 
 float RTC_DS3231::getTemperature(bool force) {
-  uint8_t msb, lsb;
+  uint8_t msb, lsb ctrl;
 
     if (force) {
         while (read_i2c_register(DS3231_ADDRESS, DS3231_STATUSREG) & 0b00000100); // check for BSY bit
