@@ -1,4 +1,4 @@
-This is a fork of JeeLab's fantastic real time clock library for Arduino.
+This is a fork of JeeLab's fantastic real time clock library for Arduino.  
 It exists because of a lack of support for DS3231 Temperature and Alarms in the official Adafruit library.
 
 For details on using this library with an RTC module like the DS1307, see the guide at: https://learn.adafruit.com/ds1307-real-time-clock-breakout-board-kit/overview
